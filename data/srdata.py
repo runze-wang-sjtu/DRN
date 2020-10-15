@@ -16,7 +16,7 @@ class SRData(data.Dataset):
         self.benchmark = benchmark
         self.scale = args.scale.copy()
         self.scale.reverse()
-        
+
         self._set_filesystem(args.data_dir)
         self._get_imgs_path(args)
         self._set_dataset_length()
@@ -24,9 +24,9 @@ class SRData(data.Dataset):
     def __getitem__(self, idx):
         lr, hr, filename = self._load_file(idx)
 
-        lr, hr = self.get_patch(lr, hr)
         lr, hr = common.set_channel(lr, hr, n_channels=self.args.n_colors)
-        
+        lr, hr = self.get_patch(lr, hr)
+
         lr_tensor, hr_tensor = common.np2Tensor(
             lr, hr, rgb_range=self.args.rgb_range
         )
@@ -57,8 +57,8 @@ class SRData(data.Dataset):
             filename, _ = os.path.splitext(os.path.basename(f))
             for si, s in enumerate(self.scale):
                 names_lr[si].append(os.path.join(
-                    self.dir_lr, 'X{}/{}x{}{}'.format(
-                        s, filename, s, self.ext[1]
+                    self.dir_lr, 'X{}/{}{}'.format(
+                        s, filename, self.ext[1]
                     )
                 ))
 
@@ -68,7 +68,7 @@ class SRData(data.Dataset):
         self.apath = os.path.join(data_dir, self.name)
         self.dir_hr = os.path.join(self.apath, 'HR')
         self.dir_lr = os.path.join(self.apath, 'LR_bicubic')
-        self.ext = ('.png', '.png')
+        self.ext = ('.jpg', '.jpg')
 
     def _get_index(self, idx):
         if self.train:

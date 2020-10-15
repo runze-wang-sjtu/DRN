@@ -22,6 +22,7 @@ class DRN(nn.Module):
         self.upsample = nn.Upsample(scale_factor=max(opt.scale),
                                     mode='bicubic', align_corners=False)
 
+        # should be recalculated every batch or recalculated in all spine data
         rgb_mean = (0.4488, 0.4371, 0.4040)
         rgb_std = (1.0, 1.0, 1.0)
         self.sub_mean = common.MeanShift(opt.rgb_range, rgb_mean, rgb_std)
